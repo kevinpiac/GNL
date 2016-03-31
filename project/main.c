@@ -6,7 +6,7 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:55:13 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/03/31 19:01:47 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/03/31 21:47:44 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int		main(int ac, char **av)
 
 	while (get_next_line(fd, &line) > 0)
 	{
-		printf("\n%d -> %s\n", i,line);
+		printf("%s\n",line);
 		i++;
 	}
 }

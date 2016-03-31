@@ -6,7 +6,7 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:44:47 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/03/31 20:27:05 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/03/31 22:05:46 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*gnl_findline(t_gnl *old_rest, int end)
 	len = 0;
 	new_rest = NULL;
 	rest = NULL;
-	(void)end; // unusefull at this time.
 	if (old_rest->content && ft_strlen(old_rest->content))
 	{
 		if ((new_rest = ft_strchr(old_rest->content, '\n')))
@@ -66,11 +65,13 @@ void	gnl_setrest(t_gnl *old_rest, char *buf)
 {
 	char	*new_rest;
 
+	new_rest = NULL;
 	if (old_rest->content && buf)
 	{
 		new_rest = ft_strjoin(old_rest->content, buf);
 		ft_memdel(&(old_rest)->content);
-		old_rest->content = new_rest;
+		old_rest->content = ft_strdup(new_rest);
+//		ft_memdel((void *)&new_rest); // not sure.
 	}
 	else if (buf)
 		old_rest->content = ft_strdup(buf);
