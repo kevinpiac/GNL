@@ -6,7 +6,7 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:44:47 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/04/03 14:33:28 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/04/03 14:26:06 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,59 +16,66 @@
 
 t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 {
-	t_gnl		*elem;
-	char		*cp;
-	elem = *lst;
-	while (elem && elem->fd != fd)
-		elem = elem->next;
-	if (!elem && ret)
+  t_gnl		*elem;
+  char		*test;
+  elem = *lst;
+  while (elem && elem->fd != fd)
+    elem = elem->next;
+//  if (elem)
+	  //printf("elem %s\n",elem->content);
+  if (!elem && ret)
     {
 		elem = (t_gnl *)ft_lstnew(buf, (size_t)ret + 1);
 		elem->fd = fd;
 		ft_lstadd((t_list **)lst, (t_list *)elem);
     }
-	else if (elem && ret)
-	{
-		cp = ft_strjoin(elem->content, buf);
-		elem->content = ft_strdup(cp);
-	}
-	return (elem);
+  else if (elem && ret)
+  {
+	  test = ft_strjoin(elem->content, buf);
+	  //printf("elem->content: [%s], buf-> [%s]\n", test, buf);
+//      elem->content = ft_strjoin(elem->content, buf);
+	  elem->content = ft_strdup(test);
+  }
+  return (elem);
 }
 
 int	gnl_getline(t_gnl *rest, char **line, int ret)
 {
-	char		*after_lfeed;
-	char		*old_rest;
-	char		*new_rest;
-	size_t		len;
+  char		*after_lfeed;
+  char		*old_rest;
+  char		*new_rest;
+  size_t	len;
 
-	len = 0;
-	if ((after_lfeed = ft_strchr(rest->content, '\n')))
-	{
-		old_rest = rest->content;
-		while (old_rest[len] != '\n')
-			len++;
-		*line = ft_strsub(old_rest, 0, len);
-		new_rest = ft_strdup(++after_lfeed);
-		rest->content = new_rest;
-		ft_memdel((void *)&old_rest);
-		return (1);
-	}
-	if (!ret && rest && rest->content)
-	{
-		*line = ft_strdup(rest->content);
-		ft_memdel(&(rest)->content);
-		return (1);
-	}
-	return (0);
+  len = 0;
+  if ((after_lfeed = ft_strchr(rest->content, '\n')))
+  {
+	  old_rest = rest->content;
+	  while (old_rest[len] != '\n')
+		  len++;
+//    ft_memdel((void **)line);
+      *line = ft_strsub(old_rest, 0, len);
+	  new_rest = ft_strdup(++after_lfeed);
+	  rest->content = new_rest;
+	  ft_memdel((void *)&old_rest);
+	  //printf("rest now: %s\n", rest->content);
+      return (1);
+  }
+  if (!ret && rest && rest->content)
+  {
+      *line = ft_strdup(rest->content);
+      ft_memdel(&(rest)->content);
+	  //printf("rest now2: %s\n", rest->content);
+	  return (1);
+  }
+  return (0);
 }
 
 int	get_next_line(int fd, char **line)
 {
 	static t_gnl	*lst;
-	t_gnl			*rest;
-	char			buf[BUFF_SIZE + 1];
-	int				ret;
+	t_gnl		*rest;
+	char		buf[BUFF_SIZE + 1];
+	int			ret;
 
 	if (fd == -1)
 		return (-1);
@@ -76,7 +83,9 @@ int	get_next_line(int fd, char **line)
 	if (ret == -1)
 		return (-1);
 	buf[ret] = '\0';
+	//printf("\n--START--\n buf: %s, ret: %d\n", buf, ret);
 	rest = gnl_setrest(buf, ret, fd, &lst);
+	//printf("rest I got : %s\n---END---\n", rest->content);
 	if (rest && rest->content && ft_strlen(rest->content))
 	{
 		if (gnl_getline(rest, line, ret))
