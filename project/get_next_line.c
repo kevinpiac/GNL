@@ -6,7 +6,7 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:44:47 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/04/03 14:33:28 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/04/03 15:30:37 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 {
 	t_gnl		*elem;
 	char		*cp;
+
 	elem = *lst;
 	while (elem && elem->fd != fd)
 		elem = elem->next;
@@ -30,6 +31,7 @@ t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 	else if (elem && ret)
 	{
 		cp = ft_strjoin(elem->content, buf);
+//		ft_memdel(&(elem)->content); // create a moulitest issue.
 		elem->content = ft_strdup(cp);
 	}
 	return (elem);
@@ -51,7 +53,7 @@ int	gnl_getline(t_gnl *rest, char **line, int ret)
 		*line = ft_strsub(old_rest, 0, len);
 		new_rest = ft_strdup(++after_lfeed);
 		rest->content = new_rest;
-		ft_memdel((void *)&old_rest);
+		ft_memdel((void **)&old_rest);
 		return (1);
 	}
 	if (!ret && rest && rest->content)

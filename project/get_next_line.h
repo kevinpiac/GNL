@@ -6,13 +6,13 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:45:08 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/04/03 14:37:03 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/04/03 15:33:07 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef	GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 100001
+# define BUFF_SIZE 200
 # include <stddef.h>
 
 typedef	struct		s_gnl
