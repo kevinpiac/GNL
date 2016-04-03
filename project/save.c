@@ -19,7 +19,7 @@ t_gnl	*gnl_setrest(char *buf, size_t ret, int fd, t_gnl **lst)
   t_gnl		*elem;
 
   elem = *lst;
-  while (elem && elem->fd != fd)
+  while (elem && elem->fd)
     elem = elem->next;
   if (!elem && ret)
     {
@@ -32,7 +32,7 @@ t_gnl	*gnl_setrest(char *buf, size_t ret, int fd, t_gnl **lst)
   return (elem);
 }
 
-int	gnl_getline(t_gnl *rest, char **line, int ret)
+int	gnl_getline(t_gnl *rest, char **line)
 {
   char		*after_lfeed;
   char		*old_rest;
@@ -40,9 +40,9 @@ int	gnl_getline(t_gnl *rest, char **line, int ret)
   int		len;
 
   len = 0;
-  old_rest = rest->content;
-  if ((after_lfeed = ft_strchr(old_rest, '\n')))
+  if ((after_lfeed = ft_strchr(rest->content, '\n')))
     {
+      old_rest = rest->content;
       while (old_rest[len] != '\n')
 	len++;
       //      ft_memdel((void **)line);
@@ -50,12 +50,6 @@ int	gnl_getline(t_gnl *rest, char **line, int ret)
       new_rest = ft_strdup(&after_lfeed[1]);
       ft_memdel((void **)&old_rest);
       rest->content = new_rest;
-      return (1);
-    }
-  else if (!ret)
-    {
-      *line = ft_strdup(old_rest);
-      ft_memdel((void **)&old_rest);
       return (1);
     }
   else
@@ -72,11 +66,12 @@ int	get_next_line(int fd, char **line)
   if (fd == -1)
     return (-1);
   ret = read(fd, buf, BUFF_SIZE);
-  buf[ret] = '\0';
+  buf[BUFF_SIZE] = '\0';
+  //printf("buf: %s, ret: %zu, fd: %d\n", buf, ret, fd);
   rest = gnl_setrest(buf, ret, fd, &lst);
-  if (rest && ft_strlen(rest->content))
+  if (rest)
     {
-      if (gnl_getline(rest, line, ret))
+      if (gnl_getline(rest, line))
 	return (1);
       return (get_next_line(fd, line));
     }

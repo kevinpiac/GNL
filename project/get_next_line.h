@@ -17,10 +17,10 @@
 
 typedef	struct		s_gnl
 {
-	void			*content;
-	size_t			content_size;
-	struct s_gnl	*next;
-	int				fd;
+  void			*content;
+  size_t       		content_size;
+  struct s_gnl		*next;
+  int			fd;
 }					t_gnl;
 
 int					get_next_line(int fd, char **line);

@@ -21,12 +21,10 @@ int		main(int ac, char **av)
 {
 	char *line;
 	int	fd;
-	int	fd2;
 	(void)ac;
 	line = ft_strnew(1);
 
 	fd = open(av[1], O_RDONLY);
-	fd2 = open(av[2], O_RDONLY);
 	int i;
 	i = 0;
 
