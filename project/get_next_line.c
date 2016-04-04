@@ -6,13 +6,11 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:44:47 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/04/04 12:01:05 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/04/04 14:35:23 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include "libft.h"
-#include <stdio.h>
 
 static t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 {
