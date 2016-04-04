@@ -6,7 +6,7 @@
 /*   By: kpiacent <kpiacent@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/16 11:44:47 by kpiacent          #+#    #+#             */
-/*   Updated: 2016/04/03 15:30:37 by kpiacent         ###   ########.fr       */
+/*   Updated: 2016/04/04 12:01:05 by kpiacent         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "libft.h"
 #include <stdio.h>
 
-t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
+static t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 {
 	t_gnl		*elem;
 	char		*cp;
@@ -23,21 +23,22 @@ t_gnl	*gnl_setrest(char *buf, int ret, int fd, t_gnl **lst)
 	while (elem && elem->fd != fd)
 		elem = elem->next;
 	if (!elem && ret)
-    {
+	{
 		elem = (t_gnl *)ft_lstnew(buf, (size_t)ret + 1);
 		elem->fd = fd;
 		ft_lstadd((t_list **)lst, (t_list *)elem);
-    }
+	}
 	else if (elem && ret)
 	{
 		cp = ft_strjoin(elem->content, buf);
-//		ft_memdel(&(elem)->content); // create a moulitest issue.
+		free(elem->content);
 		elem->content = ft_strdup(cp);
+		free(cp);
 	}
 	return (elem);
 }
 
-int	gnl_getline(t_gnl *rest, char **line, int ret)
+static int		gnl_getline(t_gnl *rest, char **line, int ret)
 {
 	char		*after_lfeed;
 	char		*old_rest;
@@ -53,7 +54,7 @@ int	gnl_getline(t_gnl *rest, char **line, int ret)
 		*line = ft_strsub(old_rest, 0, len);
 		new_rest = ft_strdup(++after_lfeed);
 		rest->content = new_rest;
-		ft_memdel((void **)&old_rest);
+		free(old_rest);
 		return (1);
 	}
 	if (!ret && rest && rest->content)
@@ -65,7 +66,7 @@ int	gnl_getline(t_gnl *rest, char **line, int ret)
 	return (0);
 }
 
-int	get_next_line(int fd, char **line)
+int				get_next_line(int fd, char **line)
 {
 	static t_gnl	*lst;
 	t_gnl			*rest;
@@ -84,7 +85,7 @@ int	get_next_line(int fd, char **line)
 		if (gnl_getline(rest, line, ret))
 			return (1);
 		return (get_next_line(fd, line));
-    }
+	}
 	else
 		return (0);
 }
